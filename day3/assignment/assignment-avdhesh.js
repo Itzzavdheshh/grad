@@ -3,13 +3,13 @@ import fs from "fs";
 // making readFile function promisified
 function readFilePromisified(filePath){
 
-    return new Promise((resolve, reject) =>{
+    return new Promise(function(resolve, reject){
 
-        fs.readFile(filePath, "utf-8", (err, data) => {
+        fs.readFile(filePath, "utf-8", function(err, data){
 
             // if error comes
             if(err){
-                reject("Error while reading file");
+                reject(err);
             }
 
             // if file read successfully
@@ -23,49 +23,72 @@ function readFilePromisified(filePath){
 
 }
 
-// function for success
-function success(data){
-    console.log("file data is: " + data);
+
+// simple setTimeout
+setTimeout(() => {
+
+    console.log("hi");
+
+}, 1000);
+
+
+// success function
+function f1(data){
+
+    console.log("file data is:");
+    console.log(data);
+
 }
 
-// function for error
-function error(err){
-    console.log("Error is: " + err);
-}
 
-//SetTimeout function with promise
-function delay(ms){
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-//usage with .then()
-delay(2000).then(() => console.log("Executed after 2 seconds"));
+// error function
+function f2(err){
 
-//usage with async/await
-async function run(){
-    console.log("Waiting...");
-    await delay(3000);
-    console.log("Executed after 3 seconds");
+    console.log("error:", err);
+
 }
 
 
 // async function for fetch
-async function AK(url){
-        // waiting for fetch data
+async function yash(url){
+
+    try{
+
+        // fetching data
         const a = await fetch(url);
+
         console.log("inside the function");
-        // converting response into json
+
+        // converting into json
         const b = await a.json();
+
         // printing data
         console.log(b);
 
+    }
+
+    catch(err){
+
+        console.log(err);
+
+    }
+
 }
 
+
 // calling promisified file function
-readFilePromisified("task.txt").then(success).catch(error);
+readFilePromisified("a.txt")
+.then(f1)
+.catch(f2);
 
 
 // calling fetch function
-AK("https://jsonplaceholder.typicode.com/todos/1");
+yash("https://jsonplaceholder.typicode.com/users");
 
 
-run();  // calling delay function   
+// another timeout
+setTimeout(() => {
+
+    console.log("late");
+
+}, 2000);
